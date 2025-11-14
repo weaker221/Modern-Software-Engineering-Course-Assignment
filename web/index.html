@@ -2,472 +2,405 @@
 <html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
-    <title>空域红包战线</title>
+    <title>坦克抢红包</title>
     <style>
       :root {
-        color-scheme: dark;
-        font-family: "Montserrat", "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
-        --bg-gradient: radial-gradient(circle at top, #1e3a8a 0%, #0f172a 45%, #020617 100%);
-        --panel-bg: rgba(14, 23, 42, 0.75);
-        --panel-border: rgba(148, 163, 184, 0.28);
-        --text-primary: #f8fafc;
-        --text-secondary: rgba(226, 232, 240, 0.7);
-        --accent-blue: #38bdf8;
-        --accent-green: #4ade80;
-        --accent-orange: #fb923c;
-        --accent-pink: #f472b6;
-        --cell-size: 30px;
-        --glow-shadow: 0 18px 45px rgba(15, 118, 110, 0.45);
-      }
-
-      * {
-        box-sizing: border-box;
+        color-scheme: light dark;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       }
 
       body {
         margin: 0;
         padding: 0;
-        color: var(--text-primary);
-        background: var(--bg-gradient);
-        min-height: 100vh;
+        background: #0e1116;
+        color: #f8f8f2;
         display: flex;
         flex-direction: column;
-        position: relative;
-        overflow-x: hidden;
-      }
-
-      body::before {
-        content: "";
-        position: fixed;
-        inset: 0;
-        pointer-events: none;
-        background:
-          radial-gradient(circle at 15% 20%, rgba(59, 130, 246, 0.3) 0, rgba(59, 130, 246, 0) 45%),
-          radial-gradient(circle at 85% 25%, rgba(16, 185, 129, 0.28) 0, rgba(16, 185, 129, 0) 50%),
-          radial-gradient(circle at 50% 80%, rgba(236, 72, 153, 0.22) 0, rgba(236, 72, 153, 0) 55%);
-        mix-blend-mode: screen;
-        z-index: -2;
-        animation: nebulaDrift 18s ease-in-out infinite alternate;
-      }
-
-      body::after {
-        content: "";
-        position: fixed;
-        inset: 0;
-        pointer-events: none;
-        background-image: url("data:image/svg+xml,%3Csvg width='1440' height='900' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.08'%3E%3Ccircle cx='120' cy='180' r='1.5'/%3E%3Ccircle cx='480' cy='220' r='1'/%3E%3Ccircle cx='860' cy='160' r='1.3'/%3E%3Ccircle cx='1260' cy='140' r='1.6'/%3E%3Ccircle cx='280' cy='560' r='1.2'/%3E%3Ccircle cx='940' cy='640' r='1.4'/%3E%3Ccircle cx='660' cy='420' r='1.1'/%3E%3Ccircle cx='1110' cy='780' r='1.5'/%3E%3Ccircle cx='180' cy='820' r='1.4'/%3E%3Ccircle cx='1320' cy='540' r='1.2'/%3E%3C/g%3E%3C/svg%3E");
-        background-size: 1200px 900px;
-        opacity: 0.55;
-        mix-blend-mode: screen;
-        animation: starParallax 28s linear infinite;
-        z-index: -3;
-      }
-
-      @keyframes nebulaDrift {
-        0% {
-          transform: translate3d(-2%, -1%, 0) scale(1);
-        }
-        100% {
-          transform: translate3d(2%, 1%, 0) scale(1.05);
-        }
-      }
-
-      @keyframes starParallax {
-        0% {
-          transform: translateY(0);
-        }
-        100% {
-          transform: translateY(80px);
-        }
+        align-items: center;
+        min-height: 100vh;
       }
 
       header {
         width: 100%;
-        padding: 2.5rem 1.5rem 1.5rem;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 0.75rem;
-        position: relative;
-      }
-
-      header h1 {
-        margin: 0;
-        font-size: clamp(2rem, 5vw, 3rem);
-        font-weight: 700;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        background: linear-gradient(90deg, #38bdf8, #f472b6, #fb923c, #38bdf8);
-        background-size: 220% auto;
-        -webkit-background-clip: text;
-        background-clip: text;
-        -webkit-text-fill-color: transparent;
-        animation: headingPulse 6s linear infinite;
-      }
-
-      header p {
-        margin: 0;
-        font-size: 1rem;
-        color: var(--text-secondary);
-        letter-spacing: 0.05em;
+        padding: 1rem;
+        background: linear-gradient(135deg, #303952, #596275);
         text-align: center;
-      }
-
-      @keyframes headingPulse {
-        0% {
-          background-position: 0%;
-        }
-        100% {
-          background-position: 200%;
-        }
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
       }
 
       main {
-        width: min(1100px, 100%);
-        margin: 0 auto;
-        padding: 0 1.5rem 2.5rem;
-        display: flex;
-        flex-direction: column;
-        gap: 1.75rem;
+        width: min(960px, 100%);
+        padding: 1rem 1.5rem 2rem;
+        box-sizing: border-box;
       }
 
       .hud {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-        gap: 1.25rem;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 1rem;
+        margin-bottom: 1rem;
       }
 
       .hud-card {
-        background: var(--panel-bg);
-        border: 1px solid var(--panel-border);
-        border-radius: 1.1rem;
-        padding: 1rem 1.4rem;
-        box-shadow: 0 16px 40px rgba(8, 47, 73, 0.45);
-        position: relative;
-        overflow: hidden;
+        background: rgba(255, 255, 255, 0.06);
+        padding: 0.75rem 1.25rem;
+        border-radius: 0.75rem;
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
       }
 
-      .hud-card::after {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background: radial-gradient(circle at top, rgba(56, 189, 248, 0.2), transparent 60%);
-        opacity: 0;
-        transition: opacity 0.3s ease;
-      }
-
-      .hud-card:hover::after {
-        opacity: 1;
-      }
-
-      .hud-card > div:first-child {
-        font-size: 0.85rem;
-        text-transform: uppercase;
-        letter-spacing: 0.15em;
-        color: var(--text-secondary);
-      }
-
-      .hud-card .status {
-        font-size: 1.8rem;
-        font-weight: 700;
-        margin-top: 0.4rem;
-      }
-
-      .battlefield-shell {
-        background: var(--panel-bg);
-        border-radius: 1.3rem;
-        border: 1px solid var(--panel-border);
-        padding: 1.5rem;
-        box-shadow: 0 25px 55px rgba(7, 89, 133, 0.35);
-        position: relative;
-        overflow: hidden;
-      }
-
-      .battlefield-shell::before {
-        content: "";
-        position: absolute;
-        inset: -20%;
-        background: conic-gradient(from 90deg, rgba(59, 130, 246, 0.25), rgba(236, 72, 153, 0.2), rgba(129, 140, 248, 0.3), rgba(59, 130, 246, 0.25));
-        filter: blur(40px);
-        opacity: 0.35;
-        animation: aurora 12s ease-in-out infinite;
-        z-index: 0;
-      }
-
-      @keyframes aurora {
-        0%,
-        100% {
-          transform: translate(-10%, -10%) rotate(0deg);
-        }
-        50% {
-          transform: translate(10%, 10%) rotate(20deg);
-        }
-      }
-
-      .battlefield {
-        position: relative;
-        margin: 0 auto;
-        border-radius: 1rem;
-        overflow: hidden;
-        border: 1px solid rgba(148, 163, 184, 0.35);
-        box-shadow: inset 0 0 25px rgba(15, 23, 42, 0.65);
-        background-color: rgba(15, 23, 42, 0.88);
-      }
-
-      .battlefield::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background-image: linear-gradient(
-            rgba(94, 234, 212, 0.12) 1px,
-            transparent 1px
-          ),
-          linear-gradient(90deg, rgba(59, 130, 246, 0.12) 1px, transparent 1px);
-        background-size: var(--cell-size) var(--cell-size);
-        animation: runwayScroll 12s linear infinite;
-        opacity: 0.85;
-        z-index: 0;
-      }
-
-      @keyframes runwayScroll {
-        from {
-          transform: translateY(0);
-        }
-        to {
-          transform: translateY(var(--cell-size));
-        }
+      .grid-container {
+        display: flex;
+        justify-content: center;
       }
 
       #grid {
-        position: relative;
-        width: 100%;
-        height: 100%;
-        z-index: 1;
+        display: grid;
+        gap: 2px;
+        background: #1f242d;
+        padding: 8px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.45);
       }
 
-      .envelope-layer,
-      .effect-layer {
-        position: absolute;
-        inset: 0;
+      .cell {
+        width: 20px;
+        height: 20px;
+        background: #3a3f4b;
+        border-radius: 3px;
+        position: relative;
+        overflow: visible;
+      }
+
+      .cell-content {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 2px;
+        color: #0e1116;
+        user-select: none;
+        border-radius: 6px;
+        position: relative;
+        transition: transform 0.1s ease-out;
+        background: rgba(58, 63, 75, 0.0);
+      }
+
+      .cell-content span {
         pointer-events: none;
       }
 
-      .envelope {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: var(--cell-size);
-        height: var(--cell-size);
-        border-radius: 0.85rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #0f172a;
+      .shape-small {
+        width: 80%;
+        height: 80%;
+        background: #ffd36b;
+        border-radius: 50%;
+        transform: scale(0.8);
+        box-shadow: 0 0 6px rgba(255, 211, 107, 0.55);
+      }
+
+      .shape-medium {
+        width: 90%;
+        height: 90%;
+        background: #ff9f1c;
+        transform: rotate(45deg) scale(0.9);
+        box-shadow: 0 0 8px rgba(255, 159, 28, 0.55);
+      }
+
+      .shape-medium .shape-size,
+      .shape-medium .shape-value {
+        transform: rotate(-45deg);
+      }
+
+      .shape-large {
+        width: 105%;
+        height: 105%;
+        background: #ff4d6d;
+        clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+        transform: scale(1.05);
+        box-shadow: 0 0 10px rgba(255, 77, 109, 0.55);
+      }
+
+      .shape-size {
+        font-size: 0.6rem;
+        font-weight: 800;
+        line-height: 1;
+        color: #0e1116;
+      }
+
+      .shape-value {
+        font-size: 0.7rem;
         font-weight: 700;
+        line-height: 1;
+        color: #0e1116;
+      }
+
+      .cell-content.tank {
+        background: #4acf81;
+        color: #0e1116;
         font-size: 0.9rem;
-        transform-origin: center;
-        transition: transform 0.2s ease-out;
-        box-shadow: 0 10px 25px rgba(15, 23, 42, 0.45);
-        will-change: transform;
+        border-radius: 8px;
+        box-shadow: 0 0 8px rgba(74, 207, 129, 0.8);
+        width: 90%;
+        height: 90%;
       }
 
-      .envelope[data-size="Small"] {
-        background: linear-gradient(135deg, #fef3c7, #fde68a);
-      }
-
-      .envelope[data-size="Medium"] {
-        background: linear-gradient(135deg, #f97316, #fb923c);
-      }
-
-      .envelope[data-size="Large"] {
-        background: linear-gradient(135deg, #f43f5e, #fb7185);
-        color: #fff;
-      }
-
-      @keyframes envelopeFloat {
-        0%,
-        100% {
-          transform: translateY(0) scale(1);
-        }
-        50% {
-          transform: translateY(-6px) scale(1.04);
-        }
-      }
-
-      .envelope-value {
-        text-shadow: 0 1px 4px rgba(15, 23, 42, 0.45);
-      }
-
-      .tank-overlay {
+      .cell.tank-trigger::after {
+        content: "";
         position: absolute;
-        width: var(--cell-size);
-        height: var(--cell-size);
-        border-radius: 40%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transform-origin: center;
-        transform: translate3d(0, 0, 0);
-        transition: transform 0.18s ease-out;
         pointer-events: none;
-        z-index: 3;
-      }
-
-      .tank-overlay::before {
-        content: "";
-        position: absolute;
-        width: 70px;
-        height: 70px;
+        width: 60px;
+        height: 60px;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        border: 2px dashed rgba(74, 207, 129, 0.45);
         border-radius: 50%;
-        border: 2px dashed rgba(56, 189, 248, 0.55);
-        animation: radar 2s linear infinite;
+        animation: pulse 1.6s ease-in-out infinite alternate;
       }
 
-      .tank-overlay::after {
-        content: "";
-        position: absolute;
-        inset: -12px;
-        border-radius: 50%;
-        background: radial-gradient(circle, rgba(56, 189, 248, 0.45), rgba(14, 165, 233, 0));
-        filter: blur(2px);
-        opacity: 0.8;
-      }
-
-      @keyframes radar {
-        0% {
-          transform: scale(0.95) rotate(0deg);
+      @keyframes pulse {
+        from {
+          opacity: 0.25;
         }
-        100% {
-          transform: scale(1.05) rotate(360deg);
+        to {
+          opacity: 0.65;
         }
-      }
-
-      .tank-body {
-        position: relative;
-        width: 100%;
-        height: 100%;
-        border-radius: 20%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        overflow: hidden;
-        background: rgba(15, 23, 42, 0.6);
-        box-shadow: 0 10px 20px rgba(15, 23, 42, 0.45), inset 0 0 12px rgba(59, 130, 246, 0.6);
-      }
-
-      .tank-body img {
-        width: 115%;
-        height: 115%;
-        object-fit: cover;
-        border-radius: 20%;
-        filter: drop-shadow(0 6px 14px rgba(59, 130, 246, 0.45));
-        mix-blend-mode: normal;
       }
 
       .controls {
-        display: none;
+        margin-top: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      .control-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 64px);
+        grid-template-rows: repeat(3, 64px);
+        gap: 0.5rem;
       }
 
       .control-helpers {
-        display: none;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 0.75rem;
+        width: 100%;
+        margin-top: 0.5rem;
+        flex-wrap: wrap;
       }
 
       .controls-hint {
-        color: var(--text-secondary);
-        font-size: 0.95rem;
+        width: 100%;
+        color: rgba(248, 248, 242, 0.65);
+        font-size: 0.85rem;
+        text-align: left;
+      }
+
+      .duck-panel {
+        position: fixed;
+        left: 24px;
+        bottom: 24px;
+        width: 96px;
+        height: 96px;
+        border-radius: 16px;
+        background: rgba(30, 34, 45, 0.85);
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        z-index: 120;
+      }
+
+      .duck-panel:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45);
+      }
+
+      #duck-helper {
+        max-width: 72px;
+        max-height: 72px;
+        pointer-events: none;
+      }
+
+      .duck-dialog {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(14, 17, 22, 0.65);
+        backdrop-filter: blur(6px);
+        z-index: 140;
+      }
+
+      .duck-dialog[hidden] {
+        display: none;
+      }
+
+      .duck-dialog-card {
+        position: relative;
+        width: min(320px, 90vw);
+        padding: 1.5rem;
+        border-radius: 1.25rem;
+        background: rgba(33, 38, 51, 0.96);
+        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+        color: #f8f8f2;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .duck-dialog-card h3 {
+        margin: 0;
+        font-size: 1.25rem;
         text-align: center;
       }
 
-      .action-button {
-        --hover-scale: 1;
-        --hover-glow: 0;
-        background: linear-gradient(160deg, rgba(56, 189, 248, 0.85), rgba(59, 130, 246, 1));
-        color: var(--text-primary);
+      .duck-dialog-body {
+        display: flex;
+        gap: 0.75rem;
+      }
+
+      #duck-input {
+        flex: 1;
+        padding: 0.6rem 0.75rem;
+        border-radius: 0.75rem;
         border: none;
-        border-radius: 0.95rem;
-        font-size: 1rem;
-        font-weight: 600;
-        letter-spacing: 0.05em;
+        background: rgba(248, 248, 242, 0.1);
+        color: #f8f8f2;
+      }
+
+      #duck-input:focus {
+        outline: 2px solid rgba(119, 139, 235, 0.6);
+        background: rgba(248, 248, 242, 0.18);
+      }
+
+      #duck-send {
+        padding: 0.6rem 1.1rem;
+        border-radius: 0.75rem;
+        border: none;
+        background: #778beb;
+        color: #0e1116;
         cursor: pointer;
-        padding: 0.85rem 1.4rem;
-        transition: transform 0.18s ease, box-shadow 0.25s ease, background 0.3s ease;
-        transform: perspective(400px) scale(var(--hover-scale));
-        box-shadow: 0 15px 35px rgba(15, 23, 42, 0.4);
-        position: relative;
-        overflow: hidden;
+        font-weight: 600;
+        transition: transform 0.15s ease, background 0.2s ease;
       }
 
-      .action-button::before {
-        content: "";
+      #duck-send:hover,
+      #duck-send:focus {
+        transform: translateY(-2px);
+        background: #a7b8ff;
+      }
+
+      .duck-response {
+        margin: 0;
+        font-size: 0.95rem;
+        min-height: 1.2rem;
+        text-align: center;
+        color: rgba(248, 248, 242, 0.85);
+      }
+
+      .duck-close {
         position: absolute;
-        inset: -120%;
-        background: radial-gradient(circle at center, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0));
-        opacity: calc(var(--hover-glow) * 0.75);
-        transform: translate(calc(50% - 50%), calc(50% - 50%));
-        transition: opacity 0.25s ease;
+        top: 0.65rem;
+        right: 0.75rem;
+        border: none;
+        background: transparent;
+        color: rgba(248, 248, 242, 0.65);
+        font-size: 1.4rem;
+        cursor: pointer;
+        line-height: 1;
+        transition: color 0.2s ease;
       }
 
-      .action-button:active {
-        transform: scale(0.94);
-        box-shadow: 0 6px 18px rgba(15, 23, 42, 0.55);
+      .duck-close:hover,
+      .duck-close:focus {
+        color: #ffffff;
       }
 
-      .action-button.secondary {
-        background: linear-gradient(160deg, rgba(110, 231, 183, 0.9), rgba(34, 197, 94, 1));
+      button {
+        background: #596275;
+        color: #f8f8f2;
+        border: none;
+        border-radius: 0.75rem;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: transform 0.15s ease, background 0.3s ease;
       }
 
-      .action-button.alt {
-        background: linear-gradient(160deg, rgba(250, 204, 21, 0.92), rgba(249, 115, 22, 1));
+      button:hover,
+      button:focus {
+        transform: translateY(-2px);
+        background: #778beb;
+        outline: none;
       }
 
-      .action-button:disabled {
-        opacity: 0.55;
+      button:disabled {
+        opacity: 0.4;
         cursor: not-allowed;
-        box-shadow: none;
-        transform: scale(1);
+        transform: none !important;
       }
 
       .wide-button {
-        min-width: 220px;
+        padding: 0.7rem 1.4rem;
+        width: 260px;
       }
 
-      .summary {
-        background: var(--panel-bg);
-        border-radius: 1.2rem;
-        border: 1px solid var(--panel-border);
-        padding: 1.75rem 2rem;
-        box-shadow: 0 20px 50px rgba(12, 74, 110, 0.45);
+      .wide-button.secondary {
+        background: #3a3f4b;
       }
 
-      .summary h2 {
-        margin: 0 0 0.75rem;
-        font-size: 1.45rem;
-        letter-spacing: 0.08em;
-      }
-
-      .summary p {
-        margin: 0.3rem 0;
-        color: var(--text-secondary);
-        line-height: 1.7;
+      .wide-button.secondary:hover,
+      .wide-button.secondary:focus {
+        background: #5d6578;
       }
 
       footer {
         margin-top: auto;
-        padding: 1.75rem 1.5rem;
-        text-align: center;
-        color: var(--text-secondary);
-        font-size: 0.9rem;
+        padding: 1rem;
+        color: rgba(255, 255, 255, 0.65);
+        font-size: 0.85rem;
+      }
+
+      .status {
+        color: #f8f8f2;
+        font-weight: 600;
+      }
+
+      .summary {
+        margin-top: 2rem;
+        padding: 1rem 1.5rem;
+        border-radius: 1rem;
+        background: rgba(255, 255, 255, 0.08);
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+      }
+
+      .summary h2 {
+        margin: 0 0 0.5rem;
+        font-size: 1.2rem;
+      }
+
+      .summary p {
+        margin: 0.2rem 0;
+        line-height: 1.6;
       }
 
       .overlay {
         position: fixed;
         inset: 0;
-        background: rgba(2, 6, 23, 0.78);
+        background: rgba(14, 17, 22, 0.88);
         display: flex;
         align-items: center;
         justify-content: center;
         z-index: 100;
-        backdrop-filter: blur(10px);
+        backdrop-filter: blur(3px);
       }
 
       .overlay[hidden] {
@@ -475,24 +408,23 @@
       }
 
       .overlay-card {
-        background: rgba(15, 23, 42, 0.85);
-        border: 1px solid rgba(148, 163, 184, 0.35);
-        padding: 2.4rem 3rem;
-        border-radius: 1.4rem;
+        background: rgba(32, 37, 48, 0.94);
+        padding: 2rem 2.5rem;
+        border-radius: 1.5rem;
         text-align: center;
-        box-shadow: 0 18px 45px rgba(15, 23, 42, 0.65);
-        max-width: 400px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+        max-width: 360px;
       }
 
       .overlay-card h2 {
-        margin: 0 0 1rem;
-        font-size: 1.8rem;
+        margin: 0 0 0.75rem;
+        font-size: 1.4rem;
       }
 
       .overlay-card p {
-        margin: 0 0 1.5rem;
-        color: var(--text-secondary);
+        margin: 0 0 1.25rem;
         line-height: 1.6;
+        color: rgba(248, 248, 242, 0.85);
       }
 
       #rain-overlay {
@@ -510,9 +442,9 @@
 
       .rain-drop {
         position: absolute;
-        top: -15%;
-        width: 34px;
-        height: 34px;
+        top: -10%;
+        width: 28px;
+        height: 28px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -524,30 +456,6 @@
 
       .rain-drop span {
         pointer-events: none;
-        font-weight: 700;
-        color: #0f172a;
-      }
-
-      .shape-size {
-        font-size: 0.7rem;
-        font-weight: 700;
-        letter-spacing: 0.05em;
-      }
-
-      .shape-small {
-        background: linear-gradient(135deg, #fef08a, #fde047);
-        border-radius: 50%;
-        box-shadow: 0 0 18px rgba(250, 204, 21, 0.55);
-      }
-
-      .shape-medium {
-        background: linear-gradient(135deg, #fb7185, #f97316);
-        box-shadow: 0 0 18px rgba(249, 115, 22, 0.55);
-      }
-
-      .shape-large {
-        background: linear-gradient(135deg, #f43f5e, #c026d3);
-        box-shadow: 0 0 20px rgba(236, 72, 153, 0.65);
       }
 
       .rain-drop.shape-medium {
@@ -564,7 +472,7 @@
 
       @keyframes rain-fall {
         0% {
-          transform: translateY(-120%) scale(0.85);
+          transform: translateY(-120%) scale(0.8);
           opacity: 0;
         }
         10% {
@@ -576,513 +484,46 @@
         }
       }
 
-      .duck-panel {
-        position: fixed;
-        left: 24px;
-        bottom: 24px;
-        width: 92px;
-        height: 92px;
-        border-radius: 20px;
-        background: rgba(15, 23, 42, 0.78);
-        border: 1px solid rgba(148, 163, 184, 0.35);
-        box-shadow: 0 15px 35px rgba(15, 23, 42, 0.6);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        transition: transform 0.25s ease, box-shadow 0.25s ease;
-        z-index: 120;
-      }
+      @media (max-width: 768px) {
+        .cell {
+          width: 16px;
+          height: 16px;
+        }
 
-      .duck-panel:hover {
-        transform: translateY(-6px) scale(1.05);
-        box-shadow: 0 20px 45px rgba(59, 130, 246, 0.4);
-      }
-
-      #duck-helper {
-        max-width: 70px;
-        max-height: 70px;
-        filter: drop-shadow(0 6px 12px rgba(59, 130, 246, 0.45));
-      }
-
-      .duck-dialog {
-        position: fixed;
-        inset: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: rgba(2, 6, 23, 0.68);
-        backdrop-filter: blur(8px);
-        z-index: 140;
-      }
-
-      .duck-dialog[hidden] {
-        display: none;
-      }
-
-      .duck-dialog-card {
-        width: min(360px, 92vw);
-        padding: 1.75rem;
-        border-radius: 1.2rem;
-        background: rgba(15, 23, 42, 0.92);
-        border: 1px solid rgba(148, 163, 184, 0.35);
-        box-shadow: 0 18px 40px rgba(8, 47, 73, 0.55);
-        color: var(--text-primary);
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-        position: relative;
-      }
-
-      .duck-dialog-body {
-        display: flex;
-        gap: 0.75rem;
-      }
-
-      #duck-input {
-        flex: 1;
-        padding: 0.75rem 0.9rem;
-        border-radius: 1rem;
-        border: 1px solid rgba(56, 189, 248, 0.35);
-        background: rgba(15, 23, 42, 0.65);
-        color: var(--text-primary);
-      }
-
-      #duck-send {
-        padding: 0.75rem 1.1rem;
-        border-radius: 1rem;
-        border: none;
-        background: linear-gradient(135deg, #22d3ee, #3b82f6);
-        color: #0f172a;
-        cursor: pointer;
-        font-weight: 600;
-        transition: transform 0.2s ease, box-shadow 0.25s ease;
-      }
-
-      #duck-send:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 12px 25px rgba(56, 189, 248, 0.35);
-      }
-
-      .duck-close {
-        position: absolute;
-        top: 0.65rem;
-        right: 0.75rem;
-        border: none;
-        background: transparent;
-        color: rgba(226, 232, 240, 0.6);
-        font-size: 1.5rem;
-        cursor: pointer;
-        transition: color 0.2s ease;
-      }
-
-      .duck-close:hover {
-        color: #fff;
-      }
-
-      .duck-response {
-        min-height: 1.1rem;
-        color: var(--text-secondary);
-        text-align: center;
-      }
-
-      .stats-modal {
-        position: fixed;
-        inset: 0;
-        display: none;
-        align-items: center;
-        justify-content: center;
-        background: rgba(2, 6, 23, 0.75);
-        backdrop-filter: blur(8px);
-        z-index: 165;
-      }
-
-      .stats-modal.active {
-        display: flex;
-      }
-
-      .stats-modal-card {
-        width: min(480px, 90vw);
-        padding: 1.6rem 1.8rem;
-        border-radius: 1.2rem;
-        background: rgba(15, 23, 42, 0.92);
-        color: var(--text-primary);
-        box-shadow: 0 20px 55px rgba(8, 47, 73, 0.55);
-        border: 1px solid rgba(148, 163, 184, 0.35);
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-      }
-
-      .stats-modal-card h4 {
-        margin: 0;
-        font-size: 1.25rem;
-        letter-spacing: 0.05em;
-      }
-
-      .stats-modal-close {
-        position: absolute;
-        top: 0.6rem;
-        right: 0.8rem;
-        border: none;
-        background: transparent;
-        color: rgba(226, 232, 240, 0.7);
-        font-size: 1.4rem;
-        cursor: pointer;
-      }
-
-      .stats-modal-close:hover {
-        color: #fff;
-      }
-
-      .stats-panel {
-        position: fixed;
-        right: 24px;
-        bottom: 24px;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-        gap: 0.85rem;
-        z-index: 115;
-      }
-
-      .stats-button {
-        border: none;
-        background: transparent;
-        padding: 0;
-        cursor: pointer;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 0.5rem;
-        transition: transform 0.25s ease;
-      }
-
-      .stats-button:hover {
-        transform: translateY(-6px) scale(1.05);
-      }
-
-      .stats-icon {
-        width: 96px;
-        height: 96px;
-        object-fit: cover;
-        border-radius: 22px;
-        border: 1px solid rgba(148, 163, 184, 0.3);
-        box-shadow: 0 18px 40px rgba(59, 130, 246, 0.35);
-        transition: box-shadow 0.25s ease, transform 0.25s ease;
-      }
-
-      .stats-button:hover .stats-icon,
-      .stats-button:focus .stats-icon {
-        transform: translateY(-4px);
-        box-shadow: 0 24px 60px rgba(56, 189, 248, 0.4);
-        outline: none;
-      }
-
-      .stats-label {
-        font-size: 0.85rem;
-        color: var(--text-secondary);
-        letter-spacing: 0.08em;
-      }
-
-      .stats-dialog {
-        position: fixed;
-        inset: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: rgba(2, 6, 23, 0.78);
-        backdrop-filter: blur(10px);
-        z-index: 160;
-      }
-
-      .stats-dialog[hidden] {
-        display: none;
-      }
-
-      .stats-dialog-card {
-        width: min(780px, 92vw);
-        max-height: 90vh;
-        padding: 2rem;
-        border-radius: 1.5rem;
-        background: rgba(15, 23, 42, 0.88);
-        border: 1px solid rgba(148, 163, 184, 0.35);
-        box-shadow: 0 25px 65px rgba(8, 47, 73, 0.6);
-        color: var(--text-primary);
-        display: flex;
-        flex-direction: column;
-        gap: 1.2rem;
-        overflow-y: auto;
-      }
-
-      .stats-dialog-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 1rem;
-      }
-
-      .stats-dialog-header h3 {
-        margin: 0;
-        font-size: 1.4rem;
-        letter-spacing: 0.08em;
-      }
-
-      .stats-close {
-        border: none;
-        background: transparent;
-        color: rgba(226, 232, 240, 0.65);
-        font-size: 1.6rem;
-        cursor: pointer;
-        transition: color 0.2s ease;
-      }
-
-      .stats-close:hover {
-        color: #fff;
-      }
-
-      .stats-input-row {
-        display: flex;
-        flex-direction: column;
-        gap: 0.85rem;
-      }
-
-      .stats-language-row {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.75rem;
-      }
-
-      .stats-language-row label {
-        display: flex;
-        align-items: center;
-        gap: 0.4rem;
-        padding: 0.4rem 0.75rem;
-        border-radius: 0.75rem;
-        background: rgba(30, 41, 59, 0.55);
-        border: 1px solid rgba(148, 163, 184, 0.25);
-        color: var(--text-secondary);
-        cursor: pointer;
-      }
-
-      .stats-language-row input[type="checkbox"] {
-        accent-color: #38bdf8;
-      }
-
-      #stats-directory {
-        flex: 1;
-        min-width: 240px;
-        padding: 0.75rem 1rem;
-        border-radius: 1rem;
-        border: 1px solid rgba(148, 163, 184, 0.35);
-        background: rgba(15, 23, 42, 0.6);
-        color: var(--text-primary);
-      }
-
-      #stats-directory:focus {
-        outline: 2px solid rgba(56, 189, 248, 0.55);
-      }
-
-      #stats-run {
-        padding: 0.75rem 1.4rem;
-        border-radius: 1rem;
-        border: none;
-        background: linear-gradient(135deg, #34d399, #22d3ee);
-        color: #0f172a;
-        font-weight: 600;
-        cursor: pointer;
-        transition: transform 0.2s ease, box-shadow 0.25s ease;
-      }
-
-      #stats-run:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 15px 30px rgba(56, 189, 248, 0.35);
-      }
-
-      .stats-message {
-        min-height: 1.2rem;
-        color: var(--text-secondary);
-      }
-
-      .stats-results {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-        gap: 1.25rem;
-      }
-
-      #stats-advanced-toggle {
-        align-self: flex-start;
-      }
-
-      .stats-advanced {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.75rem;
-      }
-
-      .stats-advanced[hidden] {
-        display: none;
-      }
-
-      .stats-advanced label {
-        display: flex;
-        align-items: center;
-        gap: 0.4rem;
-        padding: 0.4rem 0.75rem;
-        border-radius: 0.75rem;
-        background: rgba(30, 41, 59, 0.55);
-        border: 1px solid rgba(148, 163, 184, 0.25);
-        color: var(--text-secondary);
-        cursor: pointer;
-      }
-
-      .stats-advanced input[type="checkbox"] {
-        accent-color: #38bdf8;
-      }
-
-      .stats-actions {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.75rem;
-      }
-
-      .stats-secondary-button {
-        padding: 0.65rem 1rem;
-        border-radius: 0.9rem;
-        border: 1px solid rgba(148, 163, 184, 0.35);
-        background: rgba(30, 41, 59, 0.65);
-        color: var(--text-primary);
-        font-weight: 600;
-        cursor: pointer;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-      }
-
-      .stats-secondary-button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 12px 24px rgba(15, 23, 42, 0.35);
-      }
-
-      .stats-card {
-        background: rgba(30, 41, 59, 0.65);
-        border-radius: 1.1rem;
-        padding: 1.1rem;
-        border: 1px solid rgba(148, 163, 184, 0.25);
-        box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.15);
-      }
-
-      .stats-card h4 {
-        margin: 0 0 0.75rem;
-        font-size: 1.05rem;
-        color: var(--text-primary);
-      }
-
-      .bar-chart {
-        display: flex;
-        flex-direction: column;
-        gap: 0.8rem;
-      }
-
-      .bar-row {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-      }
-
-      .bar-label {
-        width: 80px;
-        font-size: 0.85rem;
-        color: var(--text-secondary);
-        text-align: right;
-      }
-
-      .bar-track {
-        flex: 1;
-        height: 14px;
-        border-radius: 999px;
-        background: rgba(148, 163, 184, 0.12);
-        overflow: hidden;
-      }
-
-      .bar-fill {
-        height: 100%;
-        border-radius: 999px;
-        background: linear-gradient(90deg, #38bdf8, #a855f7);
-      }
-
-      .pie-chart {
-        width: 180px;
-        height: 180px;
-        border-radius: 50%;
-        background: rgba(148, 163, 184, 0.12);
-        margin: 0 auto 1rem;
-      }
-
-      .pie-legend {
-        display: flex;
-        flex-direction: column;
-        gap: 0.55rem;
-      }
-
-      .pie-legend-item {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        color: var(--text-secondary);
-        font-size: 0.9rem;
-      }
-
-      .pie-color {
-        width: 14px;
-        height: 14px;
-        border-radius: 4px;
-      }
-
-      .stats-summary {
-        display: grid;
-        gap: 0.45rem;
-        color: var(--text-secondary);
-      }
-
-      @media (max-width: 900px) {
         .control-grid {
-          grid-template-columns: repeat(3, 70px);
-          grid-template-rows: repeat(3, 70px);
+          grid-template-columns: repeat(3, 54px);
+          grid-template-rows: repeat(3, 54px);
         }
-        .battlefield-shell {
-          padding: 1.2rem;
-        }
-      }
 
-      @media (max-width: 640px) {
-        main {
-          padding: 0 1rem 2rem;
-        }
-        .control-grid {
-          grid-template-columns: repeat(3, 62px);
-          grid-template-rows: repeat(3, 62px);
-        }
-        .duck-panel {
-          width: 80px;
-          height: 80px;
+        button {
+          font-size: 0.95rem;
         }
       }
     </style>
   </head>
   <body>
     <header>
-      <h1>空域红包战线</h1>
-      <p>在飞行战线上穿梭，驾驭坦克疾驰抢夺红包，按下按钮发起一轮轮空袭！</p>
+      <h1>坦克红包挑战</h1>
+      <p>使用方向键或点击按钮移动坦克，抢在时间结束前拾取更多红包！</p>
     </header>
 
+    <!-- >>> 正确的覆盖层结构 <<< -->
     <div id="start-overlay" class="overlay">
       <div class="overlay-card">
-        <h2>飞行准备完毕</h2>
-        <p>调准雷达，锁定红包坐标。点击“准备起飞”即刻进入空域，将红包收入囊中！</p>
-        <button id="btn-start" class="action-button wide-button">准备起飞</button>
+        <h2>准备好开始了吗？</h2>
+        <p>点击下方按钮后，倒计时即刻启动，坦克可以移动抢红包。</p>
+        <button id="btn-start" class="wide-button">开始游戏</button>
       </div>
     </div>
-    <div id="rain-overlay"></div>
+
+    <div id="game-over-overlay" class="overlay" hidden>
+      <div class="overlay-card">
+        <h2>游戏结束！</h2>
+        <p id="game-over-summary">本局拾取红包 <strong>0</strong> 个，总金额 <strong>0</strong> 元。</p>
+        <button id="btn-restart" class="wide-button">再来一局</button>
+      </div>
+    </div>
+    <!-- >>> 结束 <<< -->
 
     <main>
       <section class="hud">
@@ -1100,356 +541,121 @@
         </div>
         <div class="hud-card">
           <div>当前状态</div>
-          <div class="status" id="game-status">等待启动</div>
+          <div class="status" id="game-status">加载中...</div>
         </div>
         <div class="hud-card">
           <div>触发体积</div>
-          <div class="status">雷达圈即拾取范围</div>
+          <div class="status">虚线圈即为坦克拾取范围</div>
         </div>
       </section>
 
-      <section class="battlefield-shell">
-        <div class="battlefield">
-          <div id="grid">
-            <div class="envelope-layer" id="envelope-layer"></div>
-          </div>
-        </div>
+      <section class="grid-container">
+        <div id="grid"></div>
       </section>
 
       <section class="controls">
-        <div class="control-helpers">
-          <button id="btn-rain" class="action-button alt">红包空袭</button>
-          <button id="btn-pause" class="action-button secondary">暂停</button>
-          <button id="btn-reset" class="action-button wide-button">重新部署</button>
+        <div class="control-grid">
+          <div></div>
+          <button id="btn-up">▲</button>
+          <div></div>
+          <button id="btn-left">◀</button>
+          <div></div>
+          <button id="btn-right">▶</button>
+          <div></div>
+          <button id="btn-down">▼</button>
+          <div></div>
         </div>
-        <div class="controls-hint">提示：使用 W/A/S/D 或方向键可随时调整飞行轨迹。</div>
+        <div class="control-helpers">
+          <button id="btn-rain" class="wide-button secondary">红包雨</button>
+          <button id="btn-pause" class="wide-button secondary">暂停</button>
+          <button id="btn-reset" class="wide-button">重新开始</button>
+        </div>
+        <div class="controls-hint">提示：也可以使用键盘 W/A/S/D 或箭头键来移动坦克。</div>
       </section>
-
       <section id="game-summary" class="summary" hidden>
-        <h2>任务汇报</h2>
-        <p id="summary-body">任务进行中，持续保持高能！</p>
+        <h2>本局总结</h2>
+        <p id="summary-body">比赛尚未结束，请继续努力！</p>
       </section>
     </main>
-
-    <footer>如果需要调整端口，可通过命令行或环境变量 TANK_GAME_PORT 设置。</footer>
+    <footer>端口由服务器控制（默认 8080），可通过命令行或环境变量 TANK_GAME_PORT 调整。</footer>
 
     <div class="duck-panel" id="duck-helper-panel">
       <img src="/static/duck.png" alt="Duck assistant" id="duck-helper" />
     </div>
-    <div class="stats-panel">
-      <button id="stats-button" class="stats-button" aria-label="统计代码量">
-        <img src="/static/duck2.jpg" alt="统计代码量" class="stats-icon" />
-        <span class="stats-label">统计代码量</span>
-      </button>
-    </div>
-
-    <div id="stats-dialog" class="stats-dialog" hidden>
-      <div class="stats-dialog-card">
-        <div class="stats-dialog-header">
-          <h3>代码数据雷达</h3>
-          <button id="stats-close" class="stats-close" aria-label="关闭">×</button>
-        </div>
-        <div class="stats-input-row">
-          <input id="stats-directory" type="text" placeholder="输入要统计的目录，默认当前目录" />
-          <div class="stats-language-row">
-            <label><input type="checkbox" id="lang-cpp" value="cpp" checked />C/C++</label>
-            <label><input type="checkbox" id="lang-java" value="java" />Java</label>
-            <label><input type="checkbox" id="lang-python" value="python" />Python</label>
-          </div>
-          <button id="stats-advanced-toggle" type="button" class="stats-secondary-button">高级选项</button>
-          <div id="stats-advanced-panel" class="stats-advanced" hidden>
-            <label><input type="checkbox" id="stats-include-blank" />输出空行数</label>
-            <label><input type="checkbox" id="stats-include-comments" />输出注释行数</label>
-          </div>
-          <button id="stats-run" type="button">开始扫描</button>
-        </div>
-        <div id="stats-message" class="stats-message"></div>
-        <div id="stats-results" class="stats-results" hidden>
-          <div class="stats-card">
-            <h4>语言代码量</h4>
-            <div id="stats-bar-chart" class="bar-chart"></div>
-          </div>
-          <div class="stats-card">
-            <h4>语言占比</h4>
-            <div id="stats-pie-chart" class="pie-chart"></div>
-            <div id="stats-pie-legend" class="pie-legend"></div>
-          </div>
-          <div class="stats-card">
-            <h4>Python 函数分析</h4>
-            <div id="stats-python-summary" class="stats-summary"></div>
-            <div class="stats-actions">
-              <button id="stats-print-longest" class="stats-secondary-button">打印最长函数</button>
-              <button id="stats-print-shortest" class="stats-secondary-button">打印最短函数</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  <div id="duck-dialog" class="duck-dialog" hidden>
+    <div id="duck-dialog" class="duck-dialog" hidden>
       <div class="duck-dialog-card">
         <button id="duck-close" class="duck-close" aria-label="关闭">×</button>
-        <h3>飞行助手小鸭上线</h3>
+        <h3>有什么可以帮助你？</h3>
         <div class="duck-dialog-body">
-          <input id="duck-input" type="text" placeholder="输入命令，例如“红包雨”" />
-          <button id="duck-send">发送</button>
+          <input id="duck-input" type="text" placeholder="输入命令..." />
+          <button id="duck-send">Send</button>
         </div>
         <p id="duck-response" class="duck-response"></p>
       </div>
     </div>
-    <div id="stats-function-modal" class="stats-modal">
-      <div class="stats-modal-card">
-        <button id="stats-modal-close" class="stats-modal-close" aria-label="关闭">×</button>
-        <h4 id="stats-modal-title">函数信息</h4>
-        <p id="stats-modal-message"></p>
-      </div>
-    </div>
+
+    <div id="rain-overlay"></div>
 
     <script>
-      const CELL_SIZE = 30;
-
+      // --- DOM 元素引用 ---
       const timeLeftEl = document.getElementById("time-left");
       const countEl = document.getElementById("count");
       const valueEl = document.getElementById("value");
       const gridEl = document.getElementById("grid");
-      const envelopeLayer = document.getElementById("envelope-layer");
       const statusEl = document.getElementById("game-status");
       const summaryEl = document.getElementById("game-summary");
       const summaryBodyEl = document.getElementById("summary-body");
-
       const startOverlay = document.getElementById("start-overlay");
       const startButton = document.getElementById("btn-start");
       const resetButton = document.getElementById("btn-reset");
       const rainButton = document.getElementById("btn-rain");
       const pauseButton = document.getElementById("btn-pause");
       const rainOverlay = document.getElementById("rain-overlay");
-
       const duckPanel = document.getElementById("duck-helper-panel");
       const duckDialog = document.getElementById("duck-dialog");
       const duckClose = document.getElementById("duck-close");
       const duckInput = document.getElementById("duck-input");
       const duckSend = document.getElementById("duck-send");
       const duckResponse = document.getElementById("duck-response");
-      const statsButton = document.getElementById("stats-button");
-      const statsDialog = document.getElementById("stats-dialog");
-      const statsClose = document.getElementById("stats-close");
-      const statsDirectory = document.getElementById("stats-directory");
-      const statsRun = document.getElementById("stats-run");
-      const statsLanguageChecks = {
-        cpp: document.getElementById("lang-cpp"),
-        java: document.getElementById("lang-java"),
-        python: document.getElementById("lang-python"),
-      };
-      const statsMessage = document.getElementById("stats-message");
-      const statsResults = document.getElementById("stats-results");
-      const statsBarChart = document.getElementById("stats-bar-chart");
-      const statsPieChart = document.getElementById("stats-pie-chart");
-      const statsPieLegend = document.getElementById("stats-pie-legend");
-      const statsPythonSummary = document.getElementById("stats-python-summary");
-      const statsAdvancedToggle = document.getElementById("stats-advanced-toggle");
-      const statsAdvancedPanel = document.getElementById("stats-advanced-panel");
-      const statsIncludeBlank = document.getElementById("stats-include-blank");
-      const statsIncludeComments = document.getElementById("stats-include-comments");
-      const statsPrintLongest = document.getElementById("stats-print-longest");
-      const statsPrintShortest = document.getElementById("stats-print-shortest");
-      const statsFunctionModal = document.getElementById("stats-function-modal");
-      const statsModalTitle = document.getElementById("stats-modal-title");
-      const statsModalMessage = document.getElementById("stats-modal-message");
-      const statsModalClose = document.getElementById("stats-modal-close");
+      const gameOverOverlay = document.getElementById("game-over-overlay");
+      const gameOverSummary = document.getElementById("game-over-summary");
+      const restartButton = document.getElementById("btn-restart");
 
       const directionButtons = {
-        up: { disabled: true },
-        down: { disabled: true },
-        left: { disabled: true },
-        right: { disabled: true },
+        up: document.getElementById("btn-up"),
+        down: document.getElementById("btn-down"),
+        left: document.getElementById("btn-left"),
+        right: document.getElementById("btn-right"),
       };
 
       const sizeNameMap = {
-        Small: "小",
-        Medium: "中",
-        Large: "大",
+        small: "小",
+        medium: "中",
+        large: "大",
       };
 
+      // --- 游戏状态变量 ---
       let refreshTimer = null;
       let gameStarted = false;
       let gameFinished = false;
       let gamePaused = false;
       let rainInProgress = false;
 
-      const RAIN_DROP_COUNT = 28;
-      const RAIN_ANIMATION_DURATION = 3600;
+      const RAIN_DROP_COUNT = 24;
+      const RAIN_ANIMATION_DURATION = 3400;
 
-      const gridState = {
-        width: 0,
-        height: 0,
-        heightPx: 0,
-        envelopes: new Map(),
-        tankOverlay: null,
-      };
-      const FALL_SPEED_MIN = 40;
-      const FALL_SPEED_MAX = 120;
-
-      function ensureBattlefieldDimensions(width, height) {
-        if (gridState.width === width && gridState.height === height) {
-          return;
-        }
-
-        gridState.width = width;
-        gridState.height = height;
-
-        const widthPx = width * CELL_SIZE;
-        const heightPx = height * CELL_SIZE;
-        gridEl.style.width = `${widthPx}px`;
-        gridEl.style.height = `${heightPx}px`;
-        envelopeLayer.style.width = `${widthPx}px`;
-        envelopeLayer.style.height = `${heightPx}px`;
-        gridState.heightPx = heightPx;
-
-        if (!gridState.tankOverlay) {
-          const tank = document.createElement("div");
-          tank.className = "tank-overlay";
-          const body = document.createElement("div");
-          body.className = "tank-body";
-          const img = document.createElement("img");
-          img.src = "/static/tank.jpg";
-          img.alt = "玩家坦克";
-          body.appendChild(img);
-          tank.appendChild(body);
-          gridEl.appendChild(tank);
-          gridState.tankOverlay = tank;
-        }
-      }
-
-      function updateTankPosition(tank) {
-        if (!tank) {
-          if (gridState.tankOverlay) {
-            gridState.tankOverlay.style.display = "none";
-          }
-          return;
-        }
-        if (!gridState.tankOverlay) {
-          return;
-        }
-        gridState.tankOverlay.style.display = "flex";
-        const x = tank.x * CELL_SIZE;
-        const y = tank.y * CELL_SIZE;
-        gridState.tankOverlay.style.transform = `translate3d(${x}px, ${y}px, 0)`;
-      }
-
-      function createEnvelopeNode(size) {
-        const node = document.createElement("div");
-        node.className = "envelope";
-        node.dataset.size = size ?? "Small";
-        node.style.willChange = "transform";
-        const valueSpan = document.createElement("span");
-        valueSpan.className = "envelope-value";
-        node.appendChild(valueSpan);
-        return node;
-      }
-
-      function removeEnvelopeState(id) {
-        const state = gridState.envelopes.get(id);
-        if (!state) {
-          return;
-        }
-        state.element.remove();
-        gridState.envelopes.delete(id);
-      }
-
-      function applyEnvelopeUpdates(envelopes) {
-        const activeIds = new Set();
-        const bottom =
-          gridState.heightPx > 0
-            ? gridState.heightPx - CELL_SIZE
-            : gridState.height > 0 ? (gridState.height - 1) * CELL_SIZE : 0;
-
-        envelopes.forEach((envelope) => {
-          const envelopeId = envelope.id ?? `${envelope.x ?? 0}-${envelope.y ?? 0}`;
-          activeIds.add(envelopeId);
-          let state = gridState.envelopes.get(envelopeId);
-          if (!state) {
-            const node = createEnvelopeNode(envelope.size);
-            const initialY = -CELL_SIZE * (0.5 + Math.random() * 2);
-            const velocity =
-              FALL_SPEED_MIN + Math.random() * (FALL_SPEED_MAX - FALL_SPEED_MIN);
-            state = {
-              element: node,
-              x: (envelope.x ?? 0) * CELL_SIZE,
-              y: initialY,
-              targetY: bottom,
-              velocity,
-            };
-            gridState.envelopes.set(envelopeId, state);
-            envelopeLayer.appendChild(node);
-          }
-
-          const node = state.element;
-          node.dataset.size = envelope.size ?? "Small";
-          const valueSpan = node.firstElementChild;
-          if (valueSpan) {
-            valueSpan.textContent = envelope.value ?? 0;
-          }
-          node.title = `红包面额：${envelope.value ?? 0}（${sizeNameMap[envelope.size] ?? ""}）`;
-
-          state.x = (envelope.x ?? 0) * CELL_SIZE;
-          state.targetY = bottom;
-          state.element.style.transform = `translate3d(${state.x}px, ${state.y}px, 0)`;
+      // --- 辅助函数 ---
+      function setControlsEnabled(enabled) {
+        Object.values(directionButtons).forEach((button) => {
+          button.disabled = !enabled;
         });
-
-        const toRemove = [];
-        gridState.envelopes.forEach((_, id) => {
-          if (!activeIds.has(id)) {
-            toRemove.push(id);
-          }
-        });
-        toRemove.forEach((id) => removeEnvelopeState(id));
       }
-
-      let lastFrameTime = performance.now();
-
-      function animationFrame(timestamp) {
-        const deltaSeconds = Math.min(0.05, (timestamp - lastFrameTime) / 1000);
-        lastFrameTime = timestamp;
-
-        const expired = [];
-        gridState.envelopes.forEach((state, id) => {
-          if (state.targetY === undefined) {
-            state.targetY = (gridState.heightPx || CELL_SIZE * (gridState.height || 20)) - CELL_SIZE;
-          }
-
-        if (state.y < state.targetY) {
-          state.y = Math.min(state.y + state.velocity * deltaSeconds, state.targetY);
-        } else if (state.y > state.targetY) {
-          state.y = state.targetY;
-        }
-
-        const limit =
-          gridState.heightPx > 0
-            ? gridState.heightPx + CELL_SIZE
-            : CELL_SIZE * (gridState.height || 20);
-
-        if (state.y >= state.targetY - 0.1 || state.y > limit) {
-          expired.push(id);
-          return;
-        }
-        state.element.style.transform = `translate3d(${state.x}px, ${state.y}px, 0)`;
-      });
-        expired.forEach((id) => removeEnvelopeState(id));
-
-        requestAnimationFrame(animationFrame);
-      }
-
-      requestAnimationFrame((timestamp) => {
-        lastFrameTime = timestamp;
-        requestAnimationFrame(animationFrame);
-      });
-
-      function setControlsEnabled(_enabled) {}
 
       function startPolling() {
         if (refreshTimer) {
           clearInterval(refreshTimer);
         }
-        refreshTimer = setInterval(() => refreshState(), 450);
+        refreshTimer = setInterval(() => refreshState(), 500);
       }
 
       function stopPolling() {
@@ -1469,54 +675,21 @@
         valueEl.textContent = "0";
       }
 
-      function initializeUI() {
-        setControlsEnabled(false);
-        resetButton.disabled = true;
-        pauseButton.disabled = true;
-        rainButton.disabled = true;
-        statusEl.textContent = "等待开始";
-      }
-
-      initializeUI();
-
-      const interactiveButtons = Array.from(document.querySelectorAll(".action-button"));
-      let pointerX = 0;
-      let pointerY = 0;
-      let pointerScheduled = false;
-
-      function applyButtonProximityEffects() {
-        interactiveButtons.forEach((button) => {
-          if (button.disabled) {
-            button.style.setProperty("--hover-scale", 1);
-            button.style.setProperty("--hover-glow", 0);
-            return;
-          }
-          const rect = button.getBoundingClientRect();
-          const dx = pointerX - (rect.left + rect.width / 2);
-          const dy = pointerY - (rect.top + rect.height / 2);
-          const distance = Math.sqrt(dx * dx + dy * dy);
-          const maxDistance = 220;
-          const proximity = Math.max(0, (maxDistance - distance) / maxDistance);
-          const scale = 1 + proximity * 0.14;
-          button.style.setProperty("--hover-scale", scale.toFixed(3));
-          button.style.setProperty("--hover-glow", proximity.toFixed(3));
-        });
-        pointerScheduled = false;
-      }
-
-      document.addEventListener("mousemove", (event) => {
-        pointerX = event.clientX;
-        pointerY = event.clientY;
-        if (!pointerScheduled) {
-          pointerScheduled = true;
-          requestAnimationFrame(applyButtonProximityEffects);
-        }
-      });
+      // --- 初始化 ---
+      setControlsEnabled(false);
+      resetButton.disabled = true;
+      pauseButton.disabled = true;
+      rainButton.disabled = true;
+      statusEl.textContent = "等待开始";
 
       startButton.addEventListener("click", startGame);
-      resetButton.addEventListener("click", resetGame);
+      restartButton.addEventListener("click", restartGame);
       rainButton.addEventListener("click", triggerRain);
       pauseButton.addEventListener("click", togglePause);
+
+      for (const [direction, button] of Object.entries(directionButtons)) {
+        button.addEventListener("click", () => sendMove(direction));
+      }
 
       duckPanel.addEventListener("click", openDuckDialog);
       duckClose.addEventListener("click", closeDuckDialog);
@@ -1532,61 +705,15 @@
           submitDuckCommand();
         }
       });
-      statsButton.addEventListener("click", openStatsDialog);
-      statsClose.addEventListener("click", closeStatsDialog);
-      statsDialog.addEventListener("click", (event) => {
-        if (event.target === statsDialog) {
-          closeStatsDialog();
-        }
-      });
-      statsRun.addEventListener("click", runStats);
-      statsDirectory.addEventListener("keydown", (event) => {
-        if (event.key === "Enter") {
-          event.preventDefault();
-          runStats();
-        }
-      });
-      statsPrintLongest.addEventListener("click", () => printFunctionSummary("longest"));
-      statsPrintShortest.addEventListener("click", () => printFunctionSummary("shortest"));
-      statsAdvancedToggle.addEventListener("click", () => {
-        const hidden = statsAdvancedPanel.hasAttribute("hidden");
-        if (hidden) {
-          statsAdvancedPanel.removeAttribute("hidden");
-          statsAdvancedToggle.textContent = "收起高级选项";
-        } else {
-          statsAdvancedPanel.setAttribute("hidden", "hidden");
-          statsAdvancedToggle.textContent = "高级选项";
-        }
-      });
-      statsModalClose.addEventListener("click", () => {
-        statsFunctionModal.classList.remove("active");
-      });
-      statsFunctionModal.addEventListener("click", (event) => {
-        if (event.target === statsFunctionModal) {
-          statsFunctionModal.classList.remove("active");
-        }
-      });
-
+      
       document.addEventListener("keydown", (event) => {
-        if (event.key === "Escape") {
-          let handled = false;
-          if (!duckDialog.hidden) {
-            closeDuckDialog();
-            handled = true;
-          }
-          if (!statsDialog.hidden) {
-            closeStatsDialog();
-            handled = true;
-          }
-          if (handled) {
-            event.preventDefault();
-            return;
-          }
+        if (event.key === "Escape" && !duckDialog.hidden) {
+          closeDuckDialog();
         }
-
-        if (!gameStarted || gamePaused) {
-          return;
+        if (event.key === "Escape" && gameStarted && !gameFinished) {
+          togglePause();
         }
+        if (!gameStarted || directionButtons.up.disabled || gamePaused) return;
         switch (event.key) {
           case "w":
           case "ArrowUp":
@@ -1604,23 +731,17 @@
           case "ArrowRight":
             sendMove("right");
             break;
-          default:
-            break;
         }
       });
 
+      // --- 核心游戏控制函数 ---
       async function startGame() {
-        if (gameStarted) {
-          return;
-        }
+        if (gameStarted) return;
         startButton.disabled = true;
         setHudPlaceholders();
-        statusEl.textContent = "正在准备飞行...";
+        statusEl.textContent = "正在准备游戏...";
         try {
-          const response = await fetch("/reset", { method: "POST" });
-          if (!response.ok) {
-            throw new Error("reset failed");
-          }
+          await controlGame("menu");
           gameStarted = true;
           gameFinished = false;
           gamePaused = false;
@@ -1632,7 +753,7 @@
           rainButton.disabled = false;
           await refreshState(true);
           startPolling();
-          statusEl.textContent = "任务进行中";
+          statusEl.textContent = "游戏进行中";
         } catch (error) {
           statusEl.textContent = "启动失败，请稍后重试";
           startButton.disabled = false;
@@ -1641,73 +762,74 @@
         }
       }
 
-      async function resetGame() {
-        if (!gameStarted) {
-          return;
-        }
-        stopPolling();
-        resetButton.disabled = true;
-        pauseButton.disabled = true;
-        statusEl.textContent = "重新部署中...";
-        setHudPlaceholders();
+      async function controlGame(action) {
         try {
-          const response = await fetch("/reset", { method: "POST" });
-          if (!response.ok) {
-            throw new Error("reset failed");
-          }
+          const response = await fetch('/pause', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: action }) 
+          });
+          if (!response.ok) throw new Error(`Control action '${action}' failed.`);
+          const data = await response.json();
+          gamePaused = Boolean(data.paused);
           gameFinished = false;
-          gamePaused = false;
-          rainInProgress = false;
-          rainOverlay.classList.remove("active");
-          rainOverlay.innerHTML = "";
-          pauseButton.textContent = "暂停";
-          await refreshState(true);
-          startPolling();
-          statusEl.textContent = "任务进行中";
+          if (data.restarted) {
+            rainInProgress = false;
+            rainOverlay.classList.remove("active");
+            rainOverlay.innerHTML = "";
+            await refreshState(true);
+          }
+          return data;
         } catch (error) {
-          statusEl.textContent = "重置失败，请重试";
-          console.error(error);
-        } finally {
-          resetButton.disabled = false;
-          pauseButton.disabled = !gameStarted;
-          rainButton.disabled = gameFinished || gamePaused;
+          console.error("Control game error:", error);
+          throw error;
         }
       }
 
       async function togglePause() {
-        if (!gameStarted || gameFinished) {
-          return;
-        }
+        if (!gameStarted || gameFinished) return;
         pauseButton.disabled = true;
-        statusEl.textContent = gamePaused ? "恢复飞行中..." : "悬停中...";
+        const action = gamePaused ? 'resume' : 'pause';
+        statusEl.textContent = gamePaused ? "继续游戏中..." : "正在暂停...";
         try {
-          const response = await fetch("/pause", {
-            method: "POST",
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: "action=toggle",
-          });
-          if (!response.ok) {
-            throw new Error("pause failed");
-          }
-          const data = await response.json();
-          gamePaused = Boolean(data.paused);
+          await controlGame(action);
           pauseButton.textContent = gamePaused ? "继续" : "暂停";
           if (gamePaused) {
             stopPolling();
           } else {
             startPolling();
           }
-          await refreshState(true);
-          statusEl.textContent = gamePaused ? "任务已暂停" : "任务进行中";
+          statusEl.textContent = gamePaused ? "暂停中" : "游戏进行中";
         } catch (error) {
           statusEl.textContent = "暂停操作失败，请重试";
-          console.error(error);
         } finally {
           pauseButton.disabled = false;
           rainButton.disabled = gameFinished || gamePaused || rainInProgress;
         }
       }
 
+      async function restartGame() {
+          if (!gameStarted && !gameFinished) return;
+          stopPolling();
+          statusEl.textContent = "正在重新开始...";
+          try {
+              await controlGame("restart");
+              gameStarted = true;
+              gameFinished = false;
+              gamePaused = false;
+              rainInProgress = false;
+              gameOverOverlay.hidden = true;
+              pauseButton.disabled = false;
+              pauseButton.textContent = "暂停";
+              rainButton.disabled = false;
+              startPolling();
+              statusEl.textContent = "游戏进行中";
+          } catch(error) {
+              statusEl.textContent = "重新开始失败，请重试";
+          }
+      }
+      
+      // --- UI 交互和动画函数 ---
       function openDuckDialog() {
         duckDialog.hidden = false;
         duckInput.value = "";
@@ -1719,260 +841,6 @@
         duckDialog.hidden = true;
       }
 
-      function openStatsDialog() {
-        statsDialog.hidden = false;
-        statsDirectory.value = statsDirectory.value || ".";
-        statsMessage.textContent = "";
-        statsResults.hidden = true;
-        statsAdvancedPanel.setAttribute("hidden", "hidden");
-        statsAdvancedToggle.textContent = "高级选项";
-        setTimeout(() => statsDirectory.focus(), 0);
-      }
-
-      function closeStatsDialog() {
-        statsDialog.hidden = true;
-      }
-
-      async function runStats() {
-        const input = statsDirectory.value.trim();
-        const directory = input.length === 0 ? "." : input;
-        const selectedLanguages = Object.entries(statsLanguageChecks)
-          .filter(([, checkbox]) => checkbox.checked)
-          .map(([key]) => key);
-        const includeBlank = statsIncludeBlank.checked;
-        const includeComments = statsIncludeComments.checked;
-
-        if (selectedLanguages.length === 0) {
-          statsMessage.textContent = "请选择至少一种语言后再开始扫描。";
-          return;
-        }
-
-        statsMessage.textContent = "正在扫描代码...";
-        statsResults.hidden = true;
-        try {
-          const bodyParams = new URLSearchParams();
-          bodyParams.set("directory", directory);
-          bodyParams.set("languages", selectedLanguages.join(","));
-          bodyParams.set("includeBlank", includeBlank ? "true" : "false");
-          bodyParams.set("includeComments", includeComments ? "true" : "false");
-
-          const response = await fetch("/codestats", {
-            method: "POST",
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: bodyParams.toString(),
-          });
-          if (!response.ok) {
-            let errorMessage = "统计失败，请检查目录是否可访问。";
-            try {
-              const errorData = await response.json();
-              if (errorData && errorData.error) {
-                errorMessage = errorData.error;
-              }
-            } catch {
-              const fallback = await response.text();
-              if (fallback) {
-                errorMessage = fallback;
-              }
-            }
-            throw new Error(errorMessage);
-          }
-
-          const data = await response.json();
-          updateStatsView(data);
-          const total = data.totalLines ?? 0;
-          statsMessage.textContent =
-            `目录 ${data.directory ?? directory} 的统计完成，总计 ${total} 行代码。`;
-          statsResults.dataset.directory = data.directory ?? directory;
-          statsResults.dataset.languages = selectedLanguages.join(",");
-          statsResults.dataset.includeBlank = includeBlank ? "true" : "false";
-          statsResults.dataset.includeComments = includeComments ? "true" : "false";
-        } catch (error) {
-          statsMessage.textContent = error && error.message ? error.message : "统计失败，请重试。";
-          console.error(error);
-        }
-      }
-
-      function updateStatsView(data) {
-        statsResults.hidden = false;
-        const languages = data.languages || [];
-        const colors = ["#38bdf8", "#22d3ee", "#a855f7", "#f472b6", "#fb923c", "#facc15"];
-        const includeBlank = Boolean(data.includeBlank);
-        const includeComments = Boolean(data.includeComments);
-
-        statsResults.dataset.includeBlank = includeBlank ? "true" : "false";
-        statsResults.dataset.includeComments = includeComments ? "true" : "false";
-
-        const languageTokens = [];
-        if (Array.isArray(data.includedLanguages)) {
-          data.includedLanguages.forEach((name) => {
-            const lower = String(name).toLowerCase();
-            if (lower.includes("c/c++") || lower.includes("c++") || lower.includes("c/c")) {
-              languageTokens.push("cpp");
-            } else if (lower.includes("java")) {
-              languageTokens.push("java");
-            } else if (lower.includes("python")) {
-              languageTokens.push("python");
-            }
-          });
-        }
-        if (languageTokens.length === 0 && Array.isArray(languages)) {
-          languages.forEach((item) => {
-            const lower = String(item.language).toLowerCase();
-            if (lower.includes("c/c++") || lower.includes("c++") || lower.includes("c/c")) {
-              languageTokens.push("cpp");
-            } else if (lower.includes("java")) {
-              languageTokens.push("java");
-            } else if (lower.includes("python")) {
-              languageTokens.push("python");
-            }
-          });
-        }
-        statsResults.dataset.languages = languageTokens.join(",");
-        const fallbackDirectory = statsDirectory.value.trim() || ".";
-        statsResults.dataset.directory = data.directory ?? fallbackDirectory;
-
-        statsBarChart.innerHTML = "";
-        const maxLines = Math.max(1, ...languages.map((item) => item.lines));
-
-        languages.forEach((item, index) => {
-          const row = document.createElement("div");
-          row.className = "bar-row";
-
-          const label = document.createElement("div");
-          label.className = "bar-label";
-          label.textContent = item.language;
-
-          const track = document.createElement("div");
-          track.className = "bar-track";
-
-          const fill = document.createElement("div");
-          fill.className = "bar-fill";
-          fill.style.width = `${maxLines === 0 ? 0 : (item.lines / maxLines) * 100}%`;
-          fill.style.background = `linear-gradient(90deg, ${colors[index % colors.length]}, ${colors[(index + 1) % colors.length]})`;
-
-          const value = document.createElement("span");
-          let detailText = `${item.lines} 行`;
-          if (includeBlank) {
-            const blanks = item.blankLines ?? 0;
-            detailText += `，空行 ${blanks}`;
-          }
-          if (includeComments) {
-            const comments = item.commentLines ?? 0;
-            detailText += `，注释 ${comments}`;
-          }
-          value.textContent = detailText;
-          value.style.color = "var(--text-secondary)";
-
-          track.appendChild(fill);
-          row.append(label, track, value);
-          statsBarChart.appendChild(row);
-        });
-
-        const totalLines = data.totalLines || 0;
-        let start = 0;
-        const pieSegments = languages
-          .map((item, index) => {
-            const percent = totalLines === 0 ? 0 : (item.lines / totalLines) * 100;
-            const segment = `${colors[index % colors.length]} ${start}% ${start + percent}%`;
-            start += percent;
-            return segment;
-          })
-          .join(", ");
-        statsPieChart.style.background = pieSegments
-          ? `conic-gradient(${pieSegments})`
-          : "rgba(148, 163, 184, 0.12)";
-
-        statsPieLegend.innerHTML = "";
-        languages.forEach((item, index) => {
-          const legendItem = document.createElement("div");
-          legendItem.className = "pie-legend-item";
-
-          const colorBox = document.createElement("div");
-          colorBox.className = "pie-color";
-          colorBox.style.background = colors[index % colors.length];
-
-          const percent = totalLines === 0 ? 0 : ((item.lines / totalLines) * 100).toFixed(1);
-          const text = document.createElement("span");
-          text.textContent = `${item.language}: ${item.lines} 行 (${percent}%)`;
-
-          legendItem.append(colorBox, text);
-          statsPieLegend.appendChild(legendItem);
-        });
-
-        const py = data.pythonFunctions || {};
-        statsPythonSummary.innerHTML = `
-          <div>函数数量：${py.count || 0}</div>
-          <div>平均长度：${(py.averageLength || 0).toFixed(2)} 行</div>
-          <div>最短函数：${py.minLength || 0} 行</div>
-          <div>最长函数：${py.maxLength || 0} 行</div>
-          <div>中位数：${(py.medianLength || 0).toFixed(2)} 行</div>
-        `;
-
-        if (data.directory) {
-          statsResults.dataset.directory = data.directory;
-        }
-      }
-
-      async function printFunctionSummary(type) {
-        if (statsResults.hidden) {
-          statsMessage.textContent = "请先完成一次扫描后再打印函数信息。";
-          return;
-        }
-        const directory =
-          statsResults.dataset.directory && statsResults.dataset.directory.length > 0
-            ? statsResults.dataset.directory
-            : statsDirectory.value.trim() || ".";
-        let languagesParam = [];
-        if (statsResults.dataset.languages && statsResults.dataset.languages.length > 0) {
-          languagesParam = statsResults.dataset.languages
-            .split(",")
-            .map((item) => item.trim())
-            .filter((item) => item.length > 0);
-        } else {
-          languagesParam = Object.entries(statsLanguageChecks)
-            .filter(([, checkbox]) => checkbox.checked)
-            .map(([key]) => key);
-        }
-        const includeBlank =
-          statsResults.dataset.includeBlank === "true" || statsIncludeBlank.checked;
-        const includeComments =
-          statsResults.dataset.includeComments === "true" || statsIncludeComments.checked;
-        const endpoint =
-          type === "longest" ? "/print_longest_function" : "/print_shortest_function";
-
-        try {
-          const bodyParams = new URLSearchParams();
-          bodyParams.set("directory", directory);
-          if (languagesParam.length > 0) {
-            bodyParams.set("languages", languagesParam.join(","));
-          }
-          bodyParams.set("includeBlank", includeBlank ? "true" : "false");
-          bodyParams.set("includeComments", includeComments ? "true" : "false");
-
-          const response = await fetch(endpoint, {
-            method: "POST",
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: bodyParams.toString(),
-          });
-          if (!response.ok) {
-            throw new Error("打印失败，请检查服务器返回。");
-          }
-          const data = await response.json();
-          if (data && data.success) {
-            statsModalTitle.textContent = type === "longest" ? "最长函数" : "最短函数";
-            statsModalMessage.textContent = data.message || "函数信息已打印。";
-            statsFunctionModal.classList.add("active");
-          } else {
-            statsMessage.textContent =
-              (data && data.message) || "打印失败，请稍后再试。";
-          }
-        } catch (error) {
-          statsMessage.textContent =
-            error && error.message ? error.message : "打印失败，请稍后再试。";
-          console.error(error);
-        }
-      }
-
       async function submitDuckCommand() {
         const command = duckInput.value.trim();
         if (!command) {
@@ -1981,36 +849,32 @@
           return;
         }
         if (command.includes("红包雨")) {
-          duckResponse.textContent = "空袭准备中...";
+          duckResponse.textContent = "正在为你触发红包雨...";
           try {
             await triggerRain();
-            duckResponse.textContent = "空袭完成，注意查看战绩！";
+            duckResponse.textContent = "恭喜你触发红包雨福利";
           } catch (error) {
-            duckResponse.textContent = "空袭失败，请稍后再试";
+            duckResponse.textContent = "红包雨触发失败，请稍后再试";
             console.error(error);
           }
         } else {
-          duckResponse.textContent = "已收到指令，持续升级中！";
+          duckResponse.textContent = "恭喜你触发隐藏菜单";
         }
       }
 
       async function triggerRain() {
-        if (!gameStarted || gameFinished || rainInProgress || gamePaused) {
-          return;
-        }
+        if (!gameStarted || gameFinished || rainInProgress || gamePaused) return;
         rainInProgress = true;
         rainButton.disabled = true;
-        statusEl.textContent = "空袭蓄力中...";
+        statusEl.textContent = "红包雨准备中...";
         startRainAnimation();
         try {
           await delay(RAIN_ANIMATION_DURATION);
           const response = await fetch("/rain", { method: "POST" });
-          if (!response.ok) {
-            throw new Error("rain failed");
-          }
+          if (!response.ok) throw new Error("rain failed");
           const data = await response.json();
           await refreshState();
-          statusEl.textContent = `红包雨完成！新增 ${data.spawned ?? 0} 个红包。`;
+          statusEl.textContent = `红包雨降临，新增 ${data.spawned ?? 0} 个红包！`;
         } catch (error) {
           statusEl.textContent = "红包雨触发失败，请重试";
           console.error(error);
@@ -2034,8 +898,8 @@
           label.textContent = sizeIndex === 0 ? "小" : sizeIndex === 1 ? "中" : "大";
           drop.appendChild(label);
           drop.style.left = `${Math.random() * 100}%`;
-          const delayValue = Math.random() * 0.5;
-          const duration = 2 + Math.random() * 0.8;
+          const delayValue = Math.random() * 0.6;
+          const duration = 1.8 + Math.random() * 0.8;
           drop.style.animationDelay = `${delayValue}s`;
           drop.style.animationDuration = `${duration}s`;
           rainOverlay.appendChild(drop);
@@ -2046,10 +910,9 @@
         }, RAIN_ANIMATION_DURATION);
       }
 
+      // --- 游戏逻辑函数 ---
       async function sendMove(direction) {
-        if (!gameStarted || gamePaused) {
-          return;
-        }
+        if (!gameStarted || directionButtons.up.disabled || gamePaused) return;
         try {
           await fetch("/move", {
             method: "POST",
@@ -2062,17 +925,14 @@
         }
       }
 
+      // --- 主要渲染和状态更新函数 ---
       async function refreshState(force = false) {
-        if (!gameStarted && !force) {
-          return;
-        }
+        if (!gameStarted && !force) return;
         try {
           const response = await fetch("/state");
-          if (!response.ok) {
-            throw new Error("state fetch failed");
-          }
-          const data = await response.json();
-          renderState(data);
+          if (!response.ok) throw new Error("State fetch failed.");
+          const state = await response.json();
+          renderState(state);
         } catch (error) {
           statusEl.textContent = "无法连接服务器";
           summaryEl.hidden = true;
@@ -2085,41 +945,87 @@
       }
 
       function renderState(state) {
-        ensureBattlefieldDimensions(state.worldWidth, state.worldHeight);
         timeLeftEl.textContent = state.timeLeft.toFixed(1);
-        countEl.textContent = state.stats.count ?? 0;
-        valueEl.textContent = state.stats.value ?? 0;
+        countEl.textContent = state.stats.count;
+        valueEl.textContent = state.stats.value;
+        
+        const isPausedNow = Boolean(state.paused);
+        const isFinishedNow = state.timeLeft <= 0;
 
-        gamePaused = Boolean(state.paused);
-        const finished = state.timeLeft <= 0;
-        gameFinished = finished;
+        if (gamePaused !== isPausedNow || gameFinished !== isFinishedNow) {
+            gamePaused = isPausedNow;
+            gameFinished = isFinishedNow;
 
-        if (finished) {
-          statusEl.textContent = "任务结束";
-        } else if (gamePaused) {
-          statusEl.textContent = "任务已暂停";
-        } else {
-          statusEl.textContent = "任务进行中";
+            if (gameFinished) {
+                stopPolling();
+                statusEl.textContent = "时间结束";
+                gameOverOverlay.hidden = false;
+                gameOverSummary.innerHTML =
+                    `本局拾取红包 <strong>${state.stats.count}</strong> 个，总金额 <strong>${state.stats.value}</strong> 元。` +
+                    `<br />地图大小：${state.worldWidth} × ${state.worldHeight}，倒计时 ${state.timeLimit} 秒。`;
+            } else if (gamePaused) {
+                statusEl.textContent = "暂停中";
+            } else {
+                statusEl.textContent = "游戏进行中";
+                if (!gameOverOverlay.hidden) {
+                    gameOverOverlay.hidden = true;
+                }
+            }
         }
-
-        if (finished) {
-          summaryEl.hidden = false;
-          summaryBodyEl.innerHTML =
-            `本次任务共拾取 <strong>${state.stats.count}</strong> 个红包，` +
-            `累计金额 <strong>${state.stats.value}</strong> 元。<br />` +
-            `作战区域：${state.worldWidth} × ${state.worldHeight}，倒计时 ${state.timeLimit} 秒。`;
-        } else {
-          summaryEl.hidden = true;
-        }
-
-        setControlsEnabled(!finished && !gamePaused);
-        rainButton.disabled = finished || gamePaused || rainInProgress;
-        pauseButton.disabled = !gameStarted || finished;
+        
+        setControlsEnabled(!gameFinished && !gamePaused);
+        rainButton.disabled = gameFinished || gamePaused || rainInProgress;
+        pauseButton.disabled = !gameStarted || gameFinished;
         pauseButton.textContent = gamePaused ? "继续" : "暂停";
         resetButton.disabled = !gameStarted;
 
-        applyEnvelopeUpdates(state.envelopes ?? []);
-        updateTankPosition(state.tank);
+        gridEl.style.gridTemplateColumns = `repeat(${state.worldWidth}, 20px)`;
+        gridEl.innerHTML = "";
+        const cells = [];
+        for (let y = 0; y < state.worldHeight; y += 1) {
+          for (let x = 0; x < state.worldWidth; x += 1) {
+            const cell = document.createElement("div");
+            cell.classList.add("cell");
+            const content = document.createElement("div");
+            content.classList.add("cell-content");
+            cell.appendChild(content);
+            cells.push({ cell, content });
+            gridEl.appendChild(cell);
+          }
+        }
+
+        state.envelopes.forEach((envelope) => {
+          const index = envelope.y * state.worldWidth + envelope.x;
+          if (index < 0 || index >= cells.length) return;
+          const { cell, content } = cells[index];
+          const sizeKey = ((envelope.size || "Small") + "").toLowerCase();
+          content.className = `cell-content shape-${sizeKey}`;
+          content.innerHTML = "";
+
+          const sizeSpan = document.createElement("span");
+          sizeSpan.classList.add("shape-size");
+          sizeSpan.textContent = sizeNameMap[sizeKey] ?? "";
+
+          const valueSpan = document.createElement("span");
+          valueSpan.classList.add("shape-value");
+          valueSpan.textContent = envelope.value;
+
+          content.append(sizeSpan, valueSpan);
+          cell.title = `红包面额：${envelope.value}（${sizeNameMap[sizeKey] ?? ""}）`;
+        });
+
+        const tankIndex = state.tank.y * state.worldWidth + state.tank.x;
+        if (tankIndex >= 0 && tankIndex < cells.length) {
+            const { cell, content } = cells[tankIndex];
+            cell.classList.add("tank-trigger");
+            content.className = "cell-content tank";
+            content.innerHTML = "";
+            const label = document.createElement("span");
+            label.classList.add("shape-value");
+            label.textContent = "坦";
+            content.appendChild(label);
+            cell.title = "玩家坦克（虚线圈即为触发体积）";
+        }
       }
     </script>
   </body>

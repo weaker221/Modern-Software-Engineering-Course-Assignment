@@ -1,3 +1,18 @@
-logs/*
-bin/*
-testcase/*
+	# 编译产物
+	*.o
+	*.exe
+	# 构建和输出目录
+	logs/
+	bin/
+	build/
+	dist/
+	# 测试用例（根据你的需求保留）
+	testcase/
+	# IDE 或编辑器文件
+	.vscode/
+	.idea/
+	*.swp
+	*.swo
+	# 操作系统文件
+	.DS_Store
+	Thumbs.db
